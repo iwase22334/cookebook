@@ -67,4 +67,4 @@
     jpgtoebook.sh <title> [-v]
     ```
 
- - title-ebook.pdfが生成される
+ - <title>-ebook.pdfが生成される
