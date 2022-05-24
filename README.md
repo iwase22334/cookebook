@@ -30,10 +30,13 @@
 
 ### jpeg画像の準備
 
-データを用意する。
+データを用意する
  - ディレクトリ以下にjpg画像群を用意
    - (例 title/1.jpg title/2.jpg title/3.jpg ...
    - ファイル名は`sort -V`でソート可能な名前なら何でもよい
+
+ - "vFlat Scan - PDF Scanner -"で撮影し画像でexportする方法が良い
+   - https://windowsapp.tokyo/app/1540238220/vflat-scan-pdf-scanner
 
 #### (option) pdfからjpgへ変換する
  - 以下のコマンドでpdfをjpgに変換可能
