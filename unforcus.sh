@@ -13,4 +13,7 @@ title="${input%.*}"
 while read -r n; do
     echo -n "$n:"
     convert "$n" -statistic StandardDeviation 3x3 -format "%[fx:maxima]\n" info:
-done < <(find "$title"/ -type f -name '*.jpg' | sort -V | tr \\n \\0 | xargs -0)
+done < <(find "$title" -type f -name '*.jpg' | sort -V ) | tee unforcus.txt
+
+echo "check yourself these files"
+sort -t ':' -k 2 -n < unforcus.txt | head -n 20

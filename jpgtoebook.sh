@@ -35,7 +35,7 @@ while read -r f; do
     if ! tesseract "$f" "${f%.*}" -l $TESSERACT_LANG pdf; then
         exit 1
     fi
-done < <(find "$title" -type f)
+done < <(find "$title" -type f -name '*.jpg')
 
 
 echo Unite pdf ...

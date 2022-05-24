@@ -19,7 +19,7 @@ mkdir -p "$title"
 echo Prepareing image files.
 if [ "$ext" == "pdf" ]; then
     echo "    it would take time ..."
-    pdftoppm -jpg "$title".pdf "$title"/"$title"
+    pdftoppm -jpeg "$title".pdf "$title"/"$title"
 
 else
     echo "    not supported" "$ext"
