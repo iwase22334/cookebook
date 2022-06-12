@@ -42,7 +42,7 @@
  - 以下のコマンドでpdfをjpgに変換可能
  - 入力ファイルと同名のディレクトリが生成される。
    ```
-   pdftojpg.sh <title.pdf>
+   pdftojpg.sh <title-raw.pdf>
    ```
 
 ### ピンぼけの除去(手動)
@@ -67,7 +67,7 @@
  - 準備したディレクトリを指定し変換する。
     - 縦書きの文章の場合は`-v`オプションを指定する。
     ```
-    jpgtoebook.sh <title> [-v]
+    jpgtoebook.sh [-v] [-e ext] <title>
     ```
 
- - <title>-ebook.pdfが生成される
+ - <title>.pdfが生成される

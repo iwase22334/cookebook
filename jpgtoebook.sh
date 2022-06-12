@@ -1,27 +1,36 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 ## Help
 if [ $# -eq 0 ]; then
     echo "No arguments provided"
-    echo "Usage : jpgtoebook.sh <dir> [-v]"
+    echo "Usage : jpgtoebook.sh [-v] [-e <ext>] <dir> "
     echo "  -v : vertical aligned text"
+    echo "  -e : extention. default: jpg"
     exit 1
 fi
 
 
 ## Check Argument
-input="$1"
-title="${input%.*}"
-
 for OPT in "$@"; do
     case $OPT in
         -v)
             FL_Vertical=1
+            shift 1
+            ;;
+
+        -e)
+            if [[ -z "$2" ]] || [[ "$2" =~ ^-+ ]]; then
+                echo "$PROGNAME: option requires an argument -- $1" 1>&2
+                exit 1
+            fi
+            EXT="$2"
+            shift 2
             ;;
     esac
-    shift
 done
 
+input="$1"
+title="$(basename "${input}")"
 
 echo OCR working ...
 if [ "$FL_Vertical" ]; then
@@ -32,14 +41,14 @@ fi
 
 while read -r f; do
     echo "    " processing "$f"
-    if ! tesseract "$f" "${f%.*}" -l $TESSERACT_LANG pdf; then
+    if ! tesseract "$f" "$f" -l $TESSERACT_LANG pdf; then
         exit 1
     fi
-done < <(find "$title" -type f -name '*.jpg')
+done < <(find "$input" -type f -name '*.'"$EXT")
 
 
 echo Unite pdf ...
-if ! pdfunite $(find "$title"/ -type f -name '*.pdf' | sort -V | tr \\n \\0 | xargs -0) "$title"-text.pdf; then
+if ! pdfunite $(find "$input"/ -type f -name '*.pdf' | sort -V | tr \\n \\0 | xargs -0) "$title"-text.pdf; then
     exit 1
 fi
 
@@ -47,10 +56,10 @@ fi
 echo Compressing ...
 if ! gs -sDEVICE=pdfwrite \
     -dCompatibilityLevel=1.4 \
-    -dPDFSETTINGS=/ebook \
+    -dPDFSETTINGS=/screen \
     -dAutoRotatePages=/None \
     -dNOPAUSE -dQUIET -dBATCH \
-    -sOutputFile="$title"-ebook.pdf "$title"-text.pdf; then
+    -sOutputFile="$title"-ebook.pdf "$title".pdf; then
     exit 1
 fi
 
