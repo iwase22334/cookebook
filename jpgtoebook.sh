@@ -55,7 +55,13 @@ done < <(find "$input" -maxdepth 1 -type f -name '*.'"$EXT")
 echo Unite pdf ...
 
 if [ ! -e "$input"/"$title"-text.pdf ]; then
-    if ! pdfunite $(find "$input"/ -maxdepth 1 -type f -name '*.pdf' | sort -V | tr \\n \\0 | xargs -0) "$input"/"$title"-text.pdf; then
+    array=()
+    while IFS=  read -r -d $'\0'; do
+        array+=("$REPLY")
+    done < <(find "$input"/ -maxdepth 1 -type f -name '*.pdf' -print0)
+
+    if ! pdfunite "${array[@]}" "$input"/"$title"-text.pdf; then
+
         exit 1
     fi
 fi
@@ -64,7 +70,7 @@ fi
 echo Compressing ...
 if ! gs -sDEVICE=pdfwrite \
     -dCompatibilityLevel=1.4 \
-    -dPDFSETTINGS=/screen \
+    -dPDFSETTINGS=/ebook \
     -dAutoRotatePages=/None \
     -dNOPAUSE -dQUIET -dBATCH \
     -sOutputFile="$input"/"$title"-ebook.pdf "$input"/"$title"-text.pdf; then
