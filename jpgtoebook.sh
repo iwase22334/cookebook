@@ -41,15 +41,23 @@ fi
 
 while read -r f; do
     echo "    " processing "$f"
+    if [ -e "$f".pdf ]; then
+        echo "    " skip "$f"
+        continue
+    fi
+
     if ! tesseract "$f" "$f" -l $TESSERACT_LANG pdf; then
         exit 1
     fi
-done < <(find "$input" -type f -name '*.'"$EXT")
+done < <(find "$input" -maxdepth 1 -type f -name '*.'"$EXT")
 
 
 echo Unite pdf ...
-if ! pdfunite $(find "$input"/ -type f -name '*.pdf' | sort -V | tr \\n \\0 | xargs -0) "$title"-text.pdf; then
-    exit 1
+
+if [ ! -e "$input"/"$title"-text.pdf ]; then
+    if ! pdfunite $(find "$input"/ -maxdepth 1 -type f -name '*.pdf' | sort -V | tr \\n \\0 | xargs -0) "$input"/"$title"-text.pdf; then
+        exit 1
+    fi
 fi
 
 
@@ -59,8 +67,8 @@ if ! gs -sDEVICE=pdfwrite \
     -dPDFSETTINGS=/screen \
     -dAutoRotatePages=/None \
     -dNOPAUSE -dQUIET -dBATCH \
-    -sOutputFile="$title"-ebook.pdf "$title".pdf; then
+    -sOutputFile="$input"/"$title"-ebook.pdf "$input"/"$title"-text.pdf; then
     exit 1
 fi
 
-rm "$title"-text.pdf
+rm "$input"/"$title"-text.pdf
