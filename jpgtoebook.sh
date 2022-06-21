@@ -58,7 +58,7 @@ if [ ! -e "$input"/"$title"-text.pdf ]; then
     array=()
     while IFS=  read -r -d $'\0'; do
         array+=("$REPLY")
-    done < <(find "$input"/ -maxdepth 1 -type f -name '*.pdf' -print0)
+    done < <(find "$input"/ -maxdepth 1 -type f -name '*.pdf' | sort -V | tr '\n' '\0')
 
     if ! pdfunite "${array[@]}" "$input"/"$title"-text.pdf; then
 
