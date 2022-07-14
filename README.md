@@ -38,14 +38,15 @@
  - "vFlat Scan - PDF Scanner -"で撮影し画像でexportする方法が良い
    - https://windowsapp.tokyo/app/1540238220/vflat-scan-pdf-scanner
 
-#### (option) pdfからjpgへ変換する
+### (Optional) pdfからjpgへ変換する
+
  - 以下のコマンドでpdfをjpgに変換可能
  - 入力ファイルと同名のディレクトリが生成される。
    ```
    pdftojpg.sh <title-raw.pdf>
    ```
 
-### ピンぼけの除去(手動)
+### (Optional) ピンぼけの除去(手動)
 
  - 以下のコマンドは、ぼけている可能性が高い物上位のみ表示する。
     ```
